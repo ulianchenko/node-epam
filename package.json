@@ -1,0 +1,27 @@
+{
+  "name": "node-epam",
+  "version": "1.0.0",
+  "description": "Node.js course EPAM",
+  "author": "Serhii Ulianchenko",
+  "type": "module",
+  "main": "src/index.js",
+  "scripts": {
+    "build": "tsc",
+    "start": "node dist/index.js",
+    "start:dev": "ts-node src/index.ts",
+    "test": "jest",
+    "coverage": "jest --coverage --coverageReporters=cobertura --coverageDirectory=."
+  },
+  "dependencies": {
+    "express": "^5.2.1"
+  },
+  "devDependencies": {
+    "@types/express": "^5.0.6",
+    "@types/jest": "^30.0.0",
+    "@types/node": "^26.6.4",
+    "jest": "^30.5.2",
+    "ts-jest": "^29.4.14",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.7.3"
+  }
+}
