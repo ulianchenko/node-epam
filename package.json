@@ -1,27 +1,31 @@
 {
-  "name": "node-epam",
+  "name": "nodejs-gmp-module-2-standard-library",
   "version": "1.0.0",
-  "description": "Node.js course EPAM",
-  "author": "Serhii Ulianchenko",
-  "type": "module",
-  "main": "src/index.js",
+  "description": "",
+  "main": "dist/index.js",
+  "engines": {
+    "node": "^22"
+  },
   "scripts": {
     "build": "tsc",
-    "start": "node dist/index.js",
-    "start:dev": "ts-node src/index.ts",
     "test": "jest",
-    "coverage": "jest --coverage --coverageReporters=cobertura --coverageDirectory=."
+    "test:coverage": "jest --coverage",
+    "pretest": "npm run build",
+    "lint": "./node_modules/.bin/eslint .",
+    "lint:fix": "npm run lint --fix"
   },
-  "dependencies": {
-    "express": "^5.2.1"
-  },
+  "author": "",
+  "license": "ISC",
   "devDependencies": {
-    "@types/express": "^5.0.6",
-    "@types/jest": "^30.0.0",
-    "@types/node": "^26.6.4",
-    "jest": "^30.5.2",
-    "ts-jest": "^29.4.14",
-    "ts-node": "^10.9.2",
-    "typescript": "^5.7.3"
+    "@types/jest": "^29.5.5",
+    "@types/node": "^20.14.10",
+    "@typescript-eslint/eslint-plugin": "^7.15.0",
+    "@typescript-eslint/parser": "^7.15.0",
+    "eslint": "^8.57.0",
+    "eslint-config-airbnb-base": "^15.0.0",
+    "jest": "^29.7.0",
+    "jest-junit": "^16.0.0",
+    "ts-jest": "^29.1.1",
+    "typescript": "^5.5.3"
   }
 }
