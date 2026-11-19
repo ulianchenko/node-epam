@@ -1,0 +1,328 @@
+openapi: 3.0.0
+info:
+  title: Products API
+  description: API for managing products
+  version: "1.0"
+servers:
+  - url: http://localhost:8000/api
+
+paths:
+  /products:
+    get:
+      tags:
+        - Products
+      summary: Get all products
+      responses:
+        '200':
+          description: Products retrieved successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: string
+                          description: uuid
+                        title:
+                          type: string
+                        description:
+                          type: string
+                        price:
+                          type: number
+    post:
+      tags:
+        - Products
+      summary: Create a new product
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                title:
+                  type: string
+                description:
+                  type: string
+                price:
+                  type: number
+      responses:
+        '201':
+          description: Product successfully created
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: object
+                    properties:
+                      id:
+                        type: string
+                        description: uuid
+                      title:
+                        type: string
+                      description:
+                        type: string
+                      price:
+                        type: number
+  /products/{id}:
+    get:
+      tags:
+        - Products
+      summary: Retrieve a product by ID
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+          description: uuid
+      responses:
+        '200':
+          description: Product retrieved successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: object
+                    properties:
+                      id:
+                        type: string
+                        description: uuid
+                      title:
+                        type: string
+                      description:
+                        type: string
+                      price:
+                        type: number
+        '404':
+          description: Products not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: 'Product not found'
+    put:
+      tags:
+        - Products
+      summary: Update product details by ID
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+          description: uuid
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                title:
+                  type: string
+                description:
+                  type: string
+                price:
+                  type: number
+      responses:
+        '200':
+          description: Product information updated
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: object
+                    properties:
+                      id:
+                        type: string
+                        description: uuid
+                      title:
+                        type: string
+                      description:
+                        type: string
+                      price:
+                        type: number
+        '404':
+          description: Products not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: 'Product not found'
+    delete:
+      security:
+        - bearerAuth: []
+      tags:
+        - Products
+      summary: Delete a product by ID
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Product deleted successfully
+        '404':
+          description: Products not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: 'Product not found'
+  /api/auth/register:
+    post:
+      tags:
+        - Auth
+      summary: Create new user (for Module 9)
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateUserRequestBody'
+      responses:
+        '201':
+          description: Returns new user
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreateUserResponse'
+              example:
+                data:
+                  id: eb5a26af-6e4c-4f31-a9b1-3450d42ac66c
+                  email: admin@admin.admin
+                  role: admin
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+              example:
+                error:
+                  message: Email is not valid or password is missing
+        '409':
+          description: Conflict
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+              example:
+                error:
+                  message: User with such email already exists
+  /api/auth/login:
+    post:
+      tags:
+        - Auth
+      summary: Login user (for Module 9)
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LoginRequestBody'
+      responses:
+        '200':
+          description: Returns token
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LoginUserResponse'
+              example:
+                data:
+                  description: JWT
+                  token: VugRyl8SX88-LOZhvJxupjfWX=rATjop1kFw/NcshAQ4QdX0moMh9w9pVtL4rowLVoVpjpYBSKBUJsfqjnjnr-ImD/XAWJUdXIFfy3!7ViC/pxSP5zNefrgMAt2=?3=iv7Gga=zjphHqog6Jdy?AliWwYROxe4AUzQAxM!Nc=Hxax-0hJRJ!ijgE-=6RFis!cuHXxpJBA=EpoTYmla247q6rrm1RA!WLq3rJOX1itwD-LGb8hdGVXwGFgxy9QNJ/
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+              example:
+                error:
+                  message: 'Unauthorized access'
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+  schemas:
+    CreateUserRequestBody:
+      type: object
+      properties:
+        email:
+          type: string
+          example: "admin@admin.admin"
+        password:
+          type: string
+          example: "admin"
+        role:
+          type: string
+          enum: [admin, user]
+          example: "admin"
+    CreateUserResponse:
+      type: object
+      properties:
+        id:
+          type: string
+          example: "fdbbb574-266b-4b2e-ad2d-790bcf4765c2"
+        email:
+          type: string
+          example: "admin@admin.admin"
+        role:
+          type: string
+          enum: [admin, user]
+          example: "admin"
+        error:
+          $ref: '#/components/schemas/ErrorResponse'
+    LoginRequestBody:
+      type: object
+      properties:
+        email:
+          type: string
+          example: "ann.jones@epam.com"
+        password:
+          type: string
+          example: "DDQldls?kdpw0fk"
+    LoginUserResponse:
+      type: object
+      properties:
+        token:
+          type: string
+          example: "VugRyl8SX88-LOZhvJxupjfWX=rATjop1kFw/NcshAQ4QdX0moMh9w9pVtL4rowLVoVpjpYBSKBUJsfqjnjnr-ImD/XAWJUdXIFfy3!7ViC/pxSP5zNefrgMAt2=?3=iv7Gga=zjphHqog6Jdy?AliWwYROxe4AUzQAxM!Nc=Hxax-0hJRJ!ijgE-=6RFis!cuHXxpJBA=EpoTYmla247q6rrm1RA!WLq3rJOX1itwD-LGb8hdGVXwGFgxy9QNJ/"
+    ErrorResponse:
+      type: object
+      properties:
+        message:
+          type: string
