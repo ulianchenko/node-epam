@@ -1,0 +1,241 @@
+openapi: 3.0.0
+info:
+  title: NGMP Network module
+  version: 1.0.0
+  description: API endpoints for managing users and their hobbies
+paths:
+  /api/users:
+    post:
+      summary: Create user
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                  example: John Doe
+                email:
+                  type: string
+                  example: johndoe@example.com
+      responses:
+        "201":
+          description: User created successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: object
+                    properties:
+                      user:
+                        type: object
+                        properties:
+                          id:
+                            type: string
+                            example: 5f3b4b29-03dd-4ed9-84a3-6dfcfz4c2be98
+                          name:
+                            type: string
+                            example: John Doe
+                          email:
+                            type: string
+                            example: johndoe@example.com
+                      links:
+                        type: object
+                        properties:
+                          self:
+                            type: string
+                            example: /api/users/5f3b4b29-03dd-4ed9-84a3-6dfcfz4c2be98
+                          hobbies:
+                            type: string
+                            example: /api/users/5f3b4b29-03dd-4ed9-84a3-6dfcfz4c2be98/hobbies
+                  error:
+                    type: string
+                    nullable: true
+                    example: null
+    get:
+      summary: Get users
+      responses:
+        "200":
+          description: List of users retrieved successfully
+          headers:
+            Cache-Control:
+              description: Caching directive
+              schema:
+                type: string
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        user:
+                          type: object
+                          properties:
+                            id:
+                              type: string
+                              example: 5f3b4b29-03dd-4ed9-84a3-6dfcfz4c2be98
+                            name:
+                              type: string
+                              example: John Doe
+                            email:
+                              type: string
+                              example: johndoe@example.com
+                        links:
+                          type: object
+                          properties:
+                            self:
+                              type: string
+                              example: /api/users/5f3b4b29-03dd-4ed9-84a3-6dfcfz4c2be98
+                            hobbies:
+                              type: string
+                              example: /api/users/5f3b4b29-03dd-4ed9-84a3-6dfcfz4c2be98/hobbies
+                  error:
+                    type: string
+                    nullable: true
+                    example: null
+  /api/users/{userId}:
+    delete:
+      summary: Delete user
+      parameters:
+        - name: userId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: User deleted successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: object
+                    properties:
+                      success:
+                        type: boolean
+                        example: true
+                  error:
+                    type: string
+                    nullable: true
+                    example: null
+        "404":
+          description: User not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: string
+                    nullable: true
+                    example: null
+                  error:
+                    type: string
+                    example: User with id {userId} doesn't exist
+  /api/users/{userId}/hobbies:
+    patch:
+      summary: Update hobbies
+      parameters:
+        - name: userId
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                hobbies:
+                  type: array
+                  items:
+                    type: string
+                    example: cooking
+      responses:
+        "200":
+          description: Hobbies updated successfully
+        "404":
+          description: User not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: string
+                    nullable: true
+                    example: null
+                  error:
+                    type: string
+                    example: User with id {userId} doesn't exist
+    get:
+      summary: Get hobbies
+      parameters:
+        - name: userId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: List of hobbies retrieved successfully
+          headers:
+            Cache-Control:
+              description: Caching directive
+              schema:
+                type: string
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: object
+                    properties:
+                      hobbies:
+                        type: array
+                        items:
+                          type: string
+                        example:
+                          - reading
+                          - sports
+                          - swimming
+                      links:
+                        type: object
+                        properties:
+                          self:
+                            type: string
+                            example: /api/users/5f3b4b29-03dd-4ed9-84a3-6dfcfz4c2be98/hobbies
+                          user:
+                            type: string
+                            example: /api/users/5f3b4b29-03dd-4ed9-84a3-6dfcfz4c2be98
+                  error:
+                    type: string
+                    nullable: true
+                    example: null
+        "404":
+          description: User not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: string
+                    nullable: true
+                    example: null
+                  error:
+                    type: string
+                    example: User with id {userId} doesn't exist
